@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Cute Birthday Website</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff7f8;
+    font-family: 'Baloo 2', cursive;
+    color: #612d6d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #app {
+    background: #ffc9de;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(197, 96, 153, 0.3);
+    width: 350px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: relative;
+    user-select: none;
+  }
+  .page {
+    flex: 1;
+    text-align: center;
+    padding: 10px 20px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .page.active {
+    display: flex;
+  }
+  .page h1 {
+    font-size: 2.3rem;
+    margin-bottom: 0.3rem;
+    color: #47154d;
+    text-shadow: 1px 1px 3px #ffb3c6;
+  }
+  .page p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #791c6a;
+  }
+  .page img {
+    border-radius: 20px;
+    max-width: 95%;
+    max-height: 300px;
+    box-shadow: 0 5px 15px rgba(197, 96, 153, 0.3);
+    object-fit: cover;
+  }
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  button {
+    background: #9e5491;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(158, 84, 145, 0.6);
+    transition: background 0.3s ease;
+    outline-offset: 4px;
+  }
+  button:disabled {
+    background: #d2a9c7;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  button:hover:not(:disabled) {
+    background: #b566ab;
+  }
+  /* Mobile friendly */
+  @media (max-width: 400px) {
+    #app {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      padding: 15px;
+    }
+    .page h1 {
+      font-size: 2rem;
+    }
+    button {
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      border-radius: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Pages container -->
+  <div id="pages-container">
+  </div>
+  <!-- Navigation Controls -->
+  <div class="nav-buttons">
+    <button id="prevBtn" aria-label="Previous Page">← Previous</button>
+    <button id="nextBtn" aria-label="Next Page">Next →</button>
+  </div>
+</div>
+
+<script>
+  // Pages data - editable
+  const pages = [
+    {
+      title: "Introducing You",
+      text: "To the innocent looking yet the annoying asf bitch!😈",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368698402895827047/IMG_20240430_164258419_BURST001_COMP.jpg?ex=68192b38&is=6817d9b8&hm=3303bbb3f2ea1052be036341adcf412aa66cded00027440f2199b772a9f55380&=&format=webp&width=444&height=444"
+    },
+    {
+      title: "Miss Masked!",
+      text: "The one who hides her devious smile behind the mask.😷",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368702171607994418/Untitled_design.gif?ex=68192eba&is=6817dd3a&hm=d2357999f42742b1bbf86eb7dddabbd59dd0959a8a5c2f55edaee8ae0e3a226d&=&width=246&height=270"
+    },
+    {
+      title: "Body Builder!",
+      text: "Nothing is more than working out after eating fuck load of sweet shit isn't it💪",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368698012754251856/IMG_20241230_171800367.jpg?ex=68192adb&is=6817d95b&hm=60364fed8a14428b0809a6356c6ece6b21de7680fda39a9b463263989137670c&=&format=webp&width=250&height=250"
+    },
+    {
+      title: "The Climber!",
+      text: "Perfectly depicting them chimps genes in her🐒",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368712267457101955/Untitled_video_-_Made_with_Clipchamp_2.gif?ex=68193822&is=6817e6a2&hm=15001acee9f1fde30d9d96a6b38817dee97f2a4036f56e137b7b767fea8d45f0&=&width=300&height=375"
+    },
+    {
+      title: "The Kidnapper!",
+      text: "Kidnapping innocent looking introverts as a passtime🥷",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368713097270788116/Untitled_video_-_Made_with_Clipchamp_3.gif?ex=681938e7&is=6817e767&hm=e45b1bd8fe88a58dea8f06dd51136f0718d58a1ff81011903dbea213ad7f5134&=&width=300&height=375"
+    },
+    {
+      title: "Wicked Witch!",
+      text: "The one who is always ready to cast a spell on you, wannabe bangalan🧙‍♀️",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368717060565368882/Untitled_video_-_Made_with_Clipchamp_4.gif?ex=68193c98&is=6817eb18&hm=09e280067448a0f24f52cd91172349e1f5740d8ce2e459cee849ef5eef202cd6&=&width=300&height=375"
+    },
+    {
+      title: "Gulabi Daku!",
+      text: "No description needed, just look at her😏",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368720945451368478/Screenshot_20250505-0416052.png?ex=68194037&is=6817eeb7&hm=0c37bc9b8740f7d9d68fd882084ccb3acd0815d500e3ea167dfc8e3065bf1bdb&=&format=webp&quality=lossless&width=356&height=459"
+    },
+    {
+      title: "Happy Birthday!",
+      text: "The most annoying person I know, but it is worth it is(can't really abandon u *sigh*). I hope you have a great day and a wonderful year ahead.\n(Apparantly its the only pic of us together)",
+      image: "https://media.discordapp.net/attachments/1082578889810907167/1368723130872365126/Snapchat-1551708668.jpg?ex=68194240&is=6817f0c0&hm=cdfb453942554f63dc2192005c90b4dd7db7a481f2b3dcdf4533e27989d53a85&=&format=webp&width=444&height=550"
+    }
+  ];
+
+  const pagesContainer = document.getElementById("pages-container");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  let currentPage = 0;
+
+  // Function to render pages into DOM
+  function renderPages() {
+    pagesContainer.innerHTML = "";
+    pages.forEach((page, index) => {
+      const pageDiv = document.createElement("div");
+      pageDiv.classList.add("page");
+      if (index === currentPage) pageDiv.classList.add("active");
+      pageDiv.innerHTML = `
+        <h1>${page.title}</h1>
+        <img src="${page.image}" alt="${page.title}" loading="lazy" />
+        <p>${page.text}</p>
+      `;
+      pagesContainer.appendChild(pageDiv);
+    });
+    updateButtons();
+  }
+
+  // Update button disabled states
+  function updateButtons() {
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage === pages.length - 1;
+  }
+
+  // Navigation handlers
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      renderPages();
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < pages.length - 1) {
+      currentPage++;
+      renderPages();
+    }
+  });
+
+  // Initialize
+  renderPages();
+
+  // Optional: Keyboard navigation
+  window.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        renderPages();
+      }
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      if (currentPage > 0) {
+        currentPage--;
+        renderPages();
+      }
+    }
+  });
+</script>
+</body>
+</html>
+
